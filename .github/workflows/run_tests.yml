@@ -29,10 +29,15 @@ jobs:
             pip install pytest
             pip install -r requirements.txt
       
-      - name: Set up ChromeDriver
-        uses: alejandro504/setup-chromedriver@v1
-        with:
-          chromedriver-version: 'latest'
-              
+      - name: Install ChromeDriver
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+          CHROME_VERSION=$(google-chrome --version | sed 's/Google Chrome //g' | sed 's/\.//g')
+          wget https://chromedriver.storage.googleapis.com/${CHROME_VERSION}/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin/
+          sudo chmod +x /usr/local/bin/chromedriver
+          
       - name: Run tests
         run: pytest -v
