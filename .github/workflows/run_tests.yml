@@ -28,5 +28,11 @@ jobs:
             python -m pip install --upgrade pip
             pip install pytest
             pip install -r requirements.txt
+      
+      - name: Set up ChromeDriver
+        uses: alejandro504/setup-chromedriver@v1
+        with:
+          chromedriver-version: 'latest'
+              
       - name: Run tests
         run: pytest -v
