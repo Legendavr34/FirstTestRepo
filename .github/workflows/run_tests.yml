@@ -28,17 +28,29 @@ jobs:
             python -m pip install --upgrade pip
             pip install pytest
             pip install -r requirements.txt
+
+      - name: Install Google Chrome
+        uses: ./
+        with:
+          chrome-version: 120
+          install-chromedriver: true
+          install-dependencies: true
+        id: setup-chrome
+      - run: |
+          "${{ steps.setup-chrome.outputs.chrome-path }}" --version
+          "${{ steps.setup-chrome.outputs.chromedriver-path }}" --version
+            
       
-      - name: Install ChromeDriver
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget
-          CHROME_VERSION=$(google-chrome --version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
-          LATEST_VERSION=$(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-          wget https://chromedriver.storage.googleapis.com/$LATEST_VERSION/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/local/bin/
-          sudo chmod +x /usr/local/bin/chromedriver
+    #  - name: Install ChromeDriver
+     #   run: |
+    #      sudo apt-get update
+     #     sudo apt-get install -y wget
+      #    CHROME_VERSION=$(google-chrome --version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+      #    LATEST_VERSION=$(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+      #    wget https://chromedriver.storage.googleapis.com/$LATEST_VERSION/chromedriver_linux64.zip
+      #    unzip chromedriver_linux64.zip
+       #   sudo mv chromedriver /usr/local/bin/
+     #     sudo chmod +x /usr/local/bin/chromedriver
           
       - name: Run tests
         run: pytest -v
